@@ -19,37 +19,123 @@
 
             <!-- SUPER ADMIN -->
             @if(auth()->user()->role == 'superadmin')
-                <li><a href="/super/dashboard" class="block hover:bg-white/20 p-2 rounded">Dashboard</a></li>
-                <li><a href="/users" class="block hover:bg-white/20 p-2 rounded">Kelola User</a></li>
-                <li><a href="#" class="block hover:bg-white/20 p-2 rounded">Laporan</a></li>
+
+                <li>
+                    <a href="{{ route('super.dashboard') }}" class="block hover:bg-white/20 p-2 rounded">
+                        Dashboard
+                    </a>
+                </li>
+
+                <!-- DROPDOWN KELOLA USER -->
+                <li>
+                    <button onclick="toggleUserMenu()" 
+                        class="w-full text-left hover:bg-white/20 p-2 rounded flex justify-between items-center">
+                        Kelola User
+                        <span>▼</span>
+                    </button>
+
+                    <ul id="userMenu" class="ml-4 mt-2 space-y-2 hidden">
+                        <li>
+                            <a href="{{ route('super.index') }}" class="block hover:bg-white/20 p-2 rounded">
+                                List User
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('super.create') }}" class="block hover:bg-white/20 p-2 rounded">
+                                Tambah User
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="/diskon" class="block hover:bg-white/20 p-2 rounded">
+                        Kelola Diskon
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" class="block hover:bg-white/20 p-2 rounded">
+                        Laporan
+                    </a>
+                </li>
+
             @endif
 
 
             <!-- ADMIN -->
             @if(auth()->user()->role == 'admin')
-                <li><a href="/admin/dashboard" class="block hover:bg-white/20 p-2 rounded">Dashboard</a></li>
-                <li><a href="#" class="block hover:bg-white/20 p-2 rounded">Barang</a></li>
-                <li><a href="#" class="block hover:bg-white/20 p-2 rounded">Laporan</a></li>
+
+                <li>
+                    <a href="/admin/dashboard" class="block hover:bg-white/20 p-2 rounded">
+                        Dashboard
+                    </a>
+                </li>
+
+                <!-- DROPDOWN KELOLA BARANG -->
+                <li>
+                    <button onclick="toggleBarangMenu()" 
+                        class="w-full text-left hover:bg-white/20 p-2 rounded flex justify-between items-center">
+                        Kelola Barang
+                        <span>▼</span>
+                    </button>
+
+                    <ul id="barangMenu" class="ml-4 mt-2 space-y-2 hidden">
+                        <li>
+                            <a href="/barang" class="block hover:bg-white/20 p-2 rounded">
+                                List Barang
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/barang/create" class="block hover:bg-white/20 p-2 rounded">
+                                Tambah Barang
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#" class="block hover:bg-white/20 p-2 rounded">
+                        Laporan
+                    </a>
+                </li>
+
             @endif
 
 
             <!-- KASIR -->
             @if(auth()->user()->role == 'kasir')
-                <li><a href="/kasir/dashboard" class="block hover:bg-white/20 p-2 rounded">Dashboard</a></li>
-                <li><a href="#" class="block hover:bg-white/20 p-2 rounded">Transaksi</a></li>
-                <li><a href="#" class="block hover:bg-white/20 p-2 rounded">Cetak Struk</a></li>
+
+                <li>
+                    <a href="/kasir/dashboard" class="block hover:bg-white/20 p-2 rounded">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" class="block hover:bg-white/20 p-2 rounded">
+                        Transaksi
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" class="block hover:bg-white/20 p-2 rounded">
+                        Cetak Struk
+                    </a>
+                </li>
+
             @endif
 
         </ul>
 
         <div class="mt-10">
             <form action="{{ route('logout') }}" method="POST" class="mt-3">
-    @csrf
-    <button type="submit"
-        class="w-full bg-white/20 hover:bg-white/30 p-2 rounded text-left">
-        Logout
-    </button>
-</form>
+                @csrf
+                <button type="submit"
+                    class="w-full bg-white/20 hover:bg-white/30 p-2 rounded text-left">
+                    Logout
+                </button>
+            </form>
         </div>
 
     </aside>
@@ -72,6 +158,18 @@
     </main>
 
 </div>
+
+<script>
+function toggleUserMenu() {
+    const menu = document.getElementById('userMenu');
+    if(menu) menu.classList.toggle('hidden');
+}
+
+function toggleBarangMenu() {
+    const menu = document.getElementById('barangMenu');
+    if(menu) menu.classList.toggle('hidden');
+}
+</script>
 
 </body>
 </html>

@@ -66,18 +66,30 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::middleware(['role:superadmin'])->group(function () {
+    Route::middleware(['auth', 'role:superadmin'])
+    ->name('super.')
+    ->group(function () {
 
-        Route::get('/super/dashboard', [SuperDashboard::class, 'index'])
-            ->name('super.dashboard');
+         Route::get('/dashboard', [SuperDashboard::class, 'index'])
+                ->name('dashboard');
+    
+        Route::get('/users', [UserController::class, 'index'])
+            ->name('index');
 
-        // USER MANAGEMENT
-        Route::get('/users', [UserController::class, 'index']);
-        Route::get('/users/create', [UserController::class, 'create']);
-        Route::post('/users/store', [UserController::class, 'store']);
-        Route::get('/users/edit/{id}', [UserController::class, 'edit']);
-        Route::post('/users/update/{id}', [UserController::class, 'update']);
-        Route::get('/users/delete/{id}', [UserController::class, 'delete']);
+        Route::get('/users/create', [UserController::class, 'create'])
+            ->name('create');
+
+        Route::post('/users/store', [UserController::class, 'store'])
+            ->name('store');
+
+        Route::get('/users/edit/{id}', [UserController::class, 'edit'])
+            ->name('edit');
+
+        Route::post('/users/update/{id}', [UserController::class, 'update'])
+            ->name('update');
+
+       Route::delete('/users/{id}', [UserController::class, 'destroy'])
+    ->name('destroy');
     });
 
 
