@@ -5,10 +5,11 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Super\LaporanController;
 
-use App\Http\Controllers\SuperAdmin\DashboardController as SuperDashboard;
+use App\Http\Controllers\Super\DashboardController as SuperDashboard;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
-use App\Http\Controllers\Kasir\DashboardController as KasirDashboard;
+use App\Http\Controllers\Operator\DashboardController as OperatorDashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,8 +71,8 @@ Route::middleware(['auth'])->group(function () {
     ->name('super.')
     ->group(function () {
 
-         Route::get('/dashboard', [SuperDashboard::class, 'index'])
-                ->name('dashboard');
+        Route::get('/dashboard', [SuperDashboard::class, 'index'])
+            ->name('dashboard');
     
         Route::get('/users', [UserController::class, 'index'])
             ->name('index');
@@ -85,11 +86,22 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users/edit/{id}', [UserController::class, 'edit'])
             ->name('edit');
 
-        Route::post('/users/update/{id}', [UserController::class, 'update'])
+        // 🔥 INI YANG DIGANTI POST → PUT
+        Route::put('/users/update/{id}', [UserController::class, 'update'])
             ->name('update');
 
-       Route::delete('/users/{id}', [UserController::class, 'destroy'])
-    ->name('destroy');
+        Route::delete('/users/{id}', [UserController::class, 'destroy'])
+            ->name('destroy');
+
+             // 🔥 LAPORAN
+        Route::get('/laporan/transaksi', [LaporanController::class, 'transaksi'])
+            ->name('laporan.transaksi');
+
+        Route::get('/laporan/pendapatan', [LaporanController::class, 'pendapatan'])
+            ->name('laporan.pendapatan');
+
+        Route::get('/laporan/stok', [LaporanController::class, 'stok'])
+            ->name('laporan.stok');
     });
 
 
@@ -112,9 +124,9 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::middleware(['role:kasir'])->group(function () {
+    Route::middleware(['role:operator'])->group(function () {
 
-        Route::get('/kasir/dashboard', [KasirDashboard::class, 'index'])
-            ->name('kasir.dashboard');
+        Route::get('/operator/dashboard', [OperatorDashboard::class, 'index'])
+            ->name('operator.dashboard');
     });
 });

@@ -40,49 +40,71 @@ class UserController extends Controller
         return redirect('/users')->with('success', 'User berhasil ditambahkan');
     }
 
-    public function edit($id)
-    {
-        $data = User::findOrFail($id);
-        return view('super.edit', compact('data'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $data = User::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'role' => 'required'
-        ]);
-
-        $updateData = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role
-        ];
-
-        // Kalau password diisi, baru update password
-        if ($request->password) {
-            $updateData['password'] = Hash::make($request->password);
-        }
-
-        $data->update($updateData);
-
-        return redirect('/users')->with('success', 'User berhasil diupdate');
-    }
-
-   public function delete($id)
+   public function edit($id)
 {
-    $data = User::findOrFail($id);
+    $user = User::findOrFail($id);
 
-    // Cegah hapus akun sendiri
-    if (Auth::id() == $data->id) {
-        return redirect('/users')->with('error', 'Tidak bisa menghapus akun sendiri');
+    // ❌ Cegah edit akun super utama
+    if ($user->email === 'super@gfriend.com') {
+        return redirect('/users')
+            ->with('error', 'Akun Super Utama tidak bisa diedit!');
     }
 
-    $data->delete();
+    return view('super.edit', compact('user'));
+}
 
-    return redirect('/users')->with('success', 'User berhasil dihapus');
+   public function update(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+
+    // ❌ Cegah update akun super utama
+    if ($user->email === 'super@gfriend.com') {
+        return redirect('/users')
+            ->with('error', 'Akun Super Utama tidak bisa diupdate!');
+    }
+
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email,' . $id,
+        'role' => 'required'
+    ]);
+
+    $updateData = [
+        'name' => $request->name,
+        'email' => $request->email,
+        'role' => $request->role
+    ];
+
+    if ($request->password) {
+        $updateData['password'] = Hash::make($request->password);
+    }
+
+    $user->update($updateData);
+
+    return redirect('/users')
+        ->with('success', 'User berhasil diupdate!');
+}
+
+ public function destroy($id)
+{
+    $user = User::findOrFail($id);
+
+    // ❌ Cegah hapus akun super utama
+    if ($user->email === 'super@gfriend.com') {
+        return redirect('/users')
+            ->with('error', 'Akun Super Utama tidak bisa dihapus!');
+    }
+
+    // ❌ Cegah hapus akun sendiri
+    if (Auth::id() == $user->id) {
+        return redirect('/users')
+            ->with('error', 'Tidak bisa menghapus akun sendiri!');
+    }
+
+    // ✅ Hapus user
+    $user->delete();
+
+    return redirect('/users')
+        ->with('success', 'User berhasil dihapus!');
 }
 }

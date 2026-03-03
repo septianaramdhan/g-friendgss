@@ -23,8 +23,8 @@ class RedirectIfAuthenticated
                 return redirect('/admin/dashboard');
             }
 
-            if ($role == 'kasir') {
-                return redirect('/kasir/dashboard');
+            if ($role == 'operator') {
+                return redirect('/operator/dashboard');
             }
         }
 

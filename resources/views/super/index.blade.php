@@ -40,26 +40,35 @@
                             <td class="p-4">{{ $user->email }}</td>
                             <td class="p-4 capitalize">{{ $user->role }}</td>
 
-                            <td class="p-4 text-center space-x-2">
+                           <td class="p-4 text-center space-x-2">
 
-                                <a href="{{ route('super.edit', $user->id) }}"
-                                   class="bg-yellow-400 text-white px-3 py-1 rounded-lg hover:opacity-80 transition">
-                                    Edit
-                                </a>
+    {{-- Tombol Edit --}}
+    @if($user->email !== 'super@gfriend.com')
+        <a href="{{ route('super.edit', $user->id) }}"
+           class="bg-yellow-400 text-white px-3 py-1 rounded-lg hover:opacity-80 transition">
+           Edit
+        </a>
+    @endif
 
-                                <form action="{{ route('super.destroy', $user->id) }}"
-                                      method="POST"
-                                      class="inline-block"
-                                      onsubmit="return confirm('Yakin hapus user ini?')">
-                                    @csrf
-                                    @method('DELETE')
+    {{-- Tombol Hapus --}}
+    @if($user->email !== 'super@gfriend.com' && auth()->id() !== $user->id)
+        <form action="{{ route('super.destroy', $user->id) }}"
+              method="POST"
+              class="inline-block"
+              onsubmit="return confirm('Yakin hapus user ini?')">
 
-                                    <button class="bg-red-500 text-white px-3 py-1 rounded-lg hover:opacity-80 transition">
-                                        Hapus
-                                    </button>
-                                </form>
+            @csrf
+            @method('DELETE')
 
-                            </td>
+            <button type="submit"
+                class="bg-red-600 text-white px-3 py-1 rounded-lg hover:bg-red-700 transition">
+                Hapus
+            </button>
+
+        </form>
+    @endif
+
+</td>
                         </tr>
                     @empty
                         <tr>

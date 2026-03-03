@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Kasir;
+namespace App\Http\Controllers\Operator;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -13,11 +13,11 @@ class DashboardController extends Controller
             return redirect('/login');
         }
 
-        if (Auth::user()->role != 'kasir') {
+        if (Auth::user()->role != 'operator') {
             Auth::logout();
             return redirect('/login');
         }
 
-        return view('kasir.dashboard');
+        return view('operator.dashboard');
     }
 }
