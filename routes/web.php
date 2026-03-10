@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Super\LaporanController;
+use App\Http\Controllers\Super\BarangController;
 
 use App\Http\Controllers\Super\DashboardController as SuperDashboard;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
@@ -93,7 +94,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/users/{id}', [UserController::class, 'destroy'])
             ->name('destroy');
 
-             // 🔥 LAPORAN
+                         // 🔥 LAPORAN
         Route::get('/laporan/transaksi', [LaporanController::class, 'transaksi'])
             ->name('laporan.transaksi');
 
@@ -103,6 +104,39 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/laporan/stok', [LaporanController::class, 'stok'])
             ->name('laporan.stok');
     });
+
+    
+Route::middleware(['auth','role:superadmin'])
+->prefix('super')
+->name('super.')
+->group(function () {
+
+    // LIST BARANG
+    Route::get('/barang', [BarangController::class,'index'])
+        ->name('barang.index');
+
+    // HALAMAN CREATE
+    Route::get('/barang/create', [BarangController::class,'create'])
+        ->name('barang.create');
+
+    // STORE
+    Route::post('/barang/store', [BarangController::class,'store'])
+        ->name('barang.store');
+
+    // EDIT
+    Route::get('/barang/{id}/edit', [BarangController::class,'edit'])
+        ->name('barang.edit');
+
+    // UPDATE
+    Route::put('/barang/{id}', [BarangController::class,'update'])
+        ->name('barang.update');
+
+    // DELETE
+    Route::delete('/barang/{id}', [BarangController::class,'destroy'])
+        ->name('barang.destroy');
+
+});
+
 
 
     /*
