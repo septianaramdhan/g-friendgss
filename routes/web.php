@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Super\LaporanController;
 use App\Http\Controllers\Super\BarangController;
+use App\Http\Controllers\Super\DiskonController;
 
 use App\Http\Controllers\Super\DashboardController as SuperDashboard;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
@@ -134,6 +135,22 @@ Route::middleware(['auth','role:superadmin'])
     // DELETE
     Route::delete('/barang/{id}', [BarangController::class,'destroy'])
         ->name('barang.destroy');
+
+});
+
+Route::prefix('super')->name('super.')->middleware(['auth','role:superadmin'])->group(function(){
+
+    Route::get('/diskon', [DiskonController::class,'index'])->name('diskon.index');
+
+    Route::get('/diskon/create', [DiskonController::class,'create'])->name('diskon.create');
+
+    Route::post('/diskon/store', [DiskonController::class,'store'])->name('diskon.store');
+
+    Route::get('/diskon/{id}/edit', [DiskonController::class,'edit'])->name('diskon.edit');
+
+    Route::put('/diskon/{id}', [DiskonController::class,'update'])->name('diskon.update');
+
+    Route::delete('/diskon/{id}', [DiskonController::class,'destroy'])->name('diskon.destroy');
 
 });
 
