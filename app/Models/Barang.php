@@ -11,6 +11,13 @@ class Barang extends Model
     protected $fillable = [
         'nama_barang',
         'harga',
-        'stok'
+        'stok',
+        'diskon_id'
     ];
+
+    // relasi ke tabel diskon
+    public function diskon()
+    {
+        return $this->belongsTo(Diskon::class);
+    }
 }

@@ -38,7 +38,6 @@
                 <select name="role"
                     class="w-full mt-1 p-2 rounded-lg text-black focus:outline-none">
                     <option value="">-- Pilih Role --</option>
-                    <option value="superadmin">Super Admin</option>
                     <option value="admin">Admin</option>
                     <option value="kasir">Operator</option>
                 </select>

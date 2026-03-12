@@ -40,9 +40,25 @@ class="w-full mt-1 p-2 rounded-lg text-black">
 
 <div class="mb-6">
 <label>Diskon</label>
-<input type="number" name="diskon"
-value="{{ old('diskon',$barang->diskon) }}"
+
+<select name="diskon_id"
 class="w-full mt-1 p-2 rounded-lg text-black">
+
+<option value="">Tanpa Diskon</option>
+
+@foreach($diskon as $d)
+
+<option value="{{ $d->id }}"
+{{ $barang->diskon_id == $d->id ? 'selected' : '' }}>
+
+{{ $d->nama_diskon }} ({{ $d->persen }}%)
+
+</option>
+
+@endforeach
+
+</select>
+
 </div>
 
 <button

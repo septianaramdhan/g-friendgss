@@ -5,20 +5,23 @@ namespace App\Http\Controllers\Super;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Barang;
+use App\Models\Diskon;
 
 class BarangController extends Controller
 {
 
     public function index()
     {
-        $barang = Barang::latest()->get();
+        $barang = Barang::with('diskon')->latest()->get();
 
         return view('super.barang.index', compact('barang'));
     }
 
     public function create()
     {
-        return view('super.barang.create');
+        $diskon = Diskon::all();
+
+        return view('super.barang.create', compact('diskon'));
     }
 
     public function store(Request $request)
@@ -26,7 +29,8 @@ class BarangController extends Controller
         $request->validate([
             'nama_barang' => 'required',
             'harga' => 'required|numeric',
-            'stok' => 'required|numeric'
+            'stok' => 'required|numeric',
+            'diskon_id' => 'nullable'
         ]);
 
         Barang::create($request->all());
@@ -38,7 +42,9 @@ class BarangController extends Controller
     public function edit($id)
     {
         $barang = Barang::findOrFail($id);
-        return view('super.barang.edit', compact('barang'));
+        $diskon = Diskon::all();
+
+        return view('super.barang.edit', compact('barang','diskon'));
     }
 
     public function update(Request $request, $id)
@@ -46,7 +52,8 @@ class BarangController extends Controller
         $request->validate([
             'nama_barang' => 'required',
             'harga' => 'required|numeric',
-            'stok' => 'required|numeric'
+            'stok' => 'required|numeric',
+            'diskon_id' => 'nullable'
         ]);
 
         $barang = Barang::findOrFail($id);
