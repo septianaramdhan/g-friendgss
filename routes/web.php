@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Super\LaporanController;
 use App\Http\Controllers\Super\BarangController;
 use App\Http\Controllers\Super\DiskonController;
+use App\Http\Controllers\Operator\TransaksiController;
 
 use App\Http\Controllers\Super\DashboardController as SuperDashboard;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
@@ -243,17 +244,74 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
+   /*
+|--------------------------------------------------------------------------
+| KASIR / OPERATOR
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['role:operator'])
+->prefix('operator')
+->name('operator.')
+->group(function () {
+
+    Route::get('/dashboard', [OperatorDashboard::class,'index'])
+        ->name('dashboard');
+
     /*
     |--------------------------------------------------------------------------
-    | KASIR / OPERATOR
+    | TRANSAKSI
     |--------------------------------------------------------------------------
     */
 
-    Route::middleware(['role:operator'])->group(function () {
+    Route::get('/transaksi', [TransaksiController::class,'index'])
+        ->name('transaksi.index');
 
-        Route::get('/operator/dashboard', [OperatorDashboard::class, 'index'])
-            ->name('operator.dashboard');
+    Route::get('/transaksi/create', [TransaksiController::class,'create'])
+        ->name('transaksi.create');
 
-    });
+    Route::post('/transaksi/store', [TransaksiController::class,'store'])
+        ->name('transaksi.store');
+
+    Route::get('/transaksi/{id}', [TransaksiController::class,'show'])
+        ->name('transaksi.show');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RIWAYAT
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/riwayat-transaksi', [TransaksiController::class,'riwayat'])
+        ->name('riwayat.index');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CETAK STRUK
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/cetak-struk', [TransaksiController::class,'cetakIndex'])
+        ->name('cetak.index');
+
+    Route::get('/cetak-struk/{id}', [TransaksiController::class,'cetakShow'])
+        ->name('cetak.show');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LAPORAN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/laporan/transaksi', [LaporanController::class,'transaksi'])
+        ->name('laporan.transaksi');
+
+    Route::get('/laporan/pendapatan', [LaporanController::class,'pendapatan'])
+        ->name('laporan.pendapatan');
+
+});
 
 });

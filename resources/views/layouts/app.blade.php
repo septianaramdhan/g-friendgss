@@ -97,11 +97,106 @@
 
             @endif
 
-            @if(auth()->user()->role == 'operator')
-                <li><a href="/operator/dashboard" class="block p-3 hover:bg-white/20 rounded">Dashboard</a></li>
-                <li><a href="#" class="block p-3 hover:bg-white/20 rounded">Transaksi</a></li>
-                <li><a href="#" class="block p-3 hover:bg-white/20 rounded">Cetak Struk</a></li>
-            @endif
+           @if(auth()->user()->role == 'operator')
+
+<li>
+    <a href="/operator/dashboard"
+    class="block p-3 rounded transition {{ request()->is('operator/dashboard') ? 'bg-white/30 font-semibold' : 'hover:bg-white/20' }}">
+        Dashboard
+    </a>
+</li>
+
+
+{{-- KASIR --}}
+<li>
+    <button onclick="toggleKasirMenu()" 
+        class="w-full text-left p-3 rounded flex justify-between items-center hover:bg-white/20">
+
+        Kasir
+
+        <svg id="kasirIcon" class="w-4 h-4 transition-transform duration-300" 
+        fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+
+        </svg>
+
+    </button>
+
+    <ul id="kasirMenu" class="ml-4 mt-2 space-y-2 hidden border-l border-white/30 pl-2">
+
+        <li>
+            <a href="/operator/transaksi"
+            class="block p-2 rounded hover:bg-white/20 text-sm">
+                Transaksi
+            </a>
+        </li>
+
+        <li>
+            <a href="/operator/detail-transaksi"
+            class="block p-2 rounded hover:bg-white/20 text-sm">
+                Detail Transaksi
+            </a>
+        </li>
+
+        <li>
+            <a href="/operator/cetak-struk"
+            class="block p-2 rounded hover:bg-white/20 text-sm">
+                Cetak Struk
+            </a>
+        </li>
+
+    </ul>
+
+</li>
+
+
+<li>
+    <a href="/operator/riwayat-transaksi"
+    class="block p-3 rounded transition hover:bg-white/20">
+        Riwayat Transaksi
+    </a>
+</li>
+
+
+{{-- LAPORAN --}}
+<li>
+
+    <button onclick="toggleLaporanOperator()" 
+        class="w-full text-left p-3 rounded flex justify-between items-center hover:bg-white/20">
+
+        Laporan
+
+        <svg id="laporanOperatorIcon" class="w-4 h-4 transition-transform duration-300" 
+        fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+
+        </svg>
+
+    </button>
+
+    <ul id="laporanOperatorMenu" class="ml-4 mt-2 space-y-2 hidden border-l border-white/30 pl-2">
+
+        <li>
+            <a href="/operator/laporan/transaksi"
+            class="block p-2 rounded hover:bg-white/20 text-sm">
+                Laporan Transaksi
+            </a>
+        </li>
+
+        <li>
+            <a href="/operator/laporan/pendapatan"
+            class="block p-2 rounded hover:bg-white/20 text-sm">
+                Laporan Pendapatan
+            </a>
+        </li>
+
+    </ul>
+
+</li>
+
+@endif
 
         </ul>
 
@@ -152,6 +247,27 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 });
+</script>
+<script>
+     function toggleKasirMenu() {
+
+    const menu = document.getElementById("kasirMenu");
+    const icon = document.getElementById("kasirIcon");
+
+    menu.classList.toggle("hidden");
+    icon.classList.toggle("rotate-90");
+
+}
+
+function toggleLaporanOperator() {
+
+    const menu = document.getElementById("laporanOperatorMenu");
+    const icon = document.getElementById("laporanOperatorIcon");
+
+    menu.classList.toggle("hidden");
+    icon.classList.toggle("rotate-90");
+
+}
 </script>
 
 </body>
