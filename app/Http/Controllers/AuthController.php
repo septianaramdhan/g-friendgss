@@ -14,42 +14,52 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        // VALIDASI INPUT
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
+        // COBA LOGIN
         if (Auth::attempt($credentials)) {
 
             $request->session()->regenerate();
 
-            $role = Auth::user()->role;
+            $user = Auth::user();
+            $role = $user->role;
 
+            // REDIRECT BERDASARKAN ROLE
             if ($role === 'superadmin') {
                 return redirect()->route('super.dashboard');
             }
 
             if ($role === 'admin') {
-                return redirect('/admin/dashboard');
+                return redirect()->route('admin.dashboard');
             }
 
             if ($role === 'operator') {
-                return redirect('/operator/dashboard');
+                return redirect()->route('operator.dashboard');
             }
 
+            // JIKA ROLE TIDAK DIKENALI
             Auth::logout();
-            return back()->with('error', 'Role tidak dikenali');
+
+            return redirect()
+                ->route('login')
+                ->with('error', 'Role tidak dikenali');
         }
 
+        // LOGIN GAGAL
         return back()->with('error', 'Email atau password salah');
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }

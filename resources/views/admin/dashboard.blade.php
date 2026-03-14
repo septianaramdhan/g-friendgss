@@ -29,15 +29,91 @@
 
 </div>
 
-<div class="bg-white p-6 rounded-xl shadow-lg">
 
-    <h3 class="mb-4 font-bold text-lg">Informasi Admin</h3>
+<div class="grid grid-cols-3 gap-6">
 
-    <p class="text-gray-600">
-        Selamat datang <span class="font-bold text-purple-700">{{ auth()->user()->name }}</span>.
-        Anda dapat mengelola barang, diskon, dan memantau laporan stok dari menu sidebar.
-    </p>
+    {{-- GRAFIK BARANG --}}
+    <div class="col-span-2 bg-white p-6 rounded-xl shadow-lg">
+
+        <h3 class="font-bold text-lg mb-4">
+            Grafik Perubahan Barang
+        </h3>
+
+        <canvas id="grafikBarang"></canvas>
+
+    </div>
+
+
+    {{-- BARANG TERMAHAL & TERMURAH --}}
+    <div class="bg-white p-6 rounded-xl shadow-lg">
+
+        <h3 class="font-bold text-lg mb-4">
+            Informasi Barang
+        </h3>
+
+        <div class="mb-4">
+
+            <p class="text-gray-500 text-sm">Barang Termahal</p>
+
+            <p class="font-bold text-purple-700">
+                {{ $barangTermahal->nama_barang ?? '-' }}
+            </p>
+
+            <p class="text-sm text-gray-600">
+                Rp {{ number_format($barangTermahal->harga ?? 0,0,',','.') }}
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <p class="text-gray-500 text-sm">Barang Termurah</p>
+
+            <p class="font-bold text-pink-600">
+                {{ $barangTermurah->nama_barang ?? '-' }}
+            </p>
+
+            <p class="text-sm text-gray-600">
+                Rp {{ number_format($barangTermurah->harga ?? 0,0,',','.') }}
+            </p>
+
+        </div>
+
+    </div>
 
 </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('grafikBarang');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
+        datasets: [{
+            label: 'Perubahan Barang',
+            data: [100,120,130,150,140,160,170,180,200,210,230,250],
+            borderColor: '#9333ea',
+            backgroundColor: 'rgba(147,51,234,0.2)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                min: 0,
+                max: 450
+            }
+        }
+    }
+});
+
+</script>
 
 @endsection

@@ -20,9 +20,26 @@ use App\Http\Controllers\Operator\DashboardController as OperatorDashboard;
 */
 
 Route::get('/', function () {
-    return redirect()->route('login');
-});
 
+    if (Auth::check()) {
+
+        if (Auth::user()->role == 'superadmin') {
+            return redirect()->route('super.dashboard');
+        }
+
+        if (Auth::user()->role == 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if (Auth::user()->role == 'operator') {
+            return redirect()->route('operator.dashboard');
+        }
+
+    }
+
+    return redirect()->route('login');
+
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -55,11 +72,14 @@ Route::middleware(['auth'])->group(function () {
     */
 
     Route::post('/logout', function () {
+
         Auth::logout();
+
         request()->session()->invalidate();
         request()->session()->regenerateToken();
 
         return redirect()->route('login');
+
     })->name('logout');
 
 
@@ -69,7 +89,8 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::middleware(['auth', 'role:superadmin'])
+    Route::middleware(['role:superadmin'])
+    ->prefix('super')   // FIX DI SINI
     ->name('super.')
     ->group(function () {
 
@@ -111,7 +132,7 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::middleware(['auth','role:superadmin,admin'])
+    Route::middleware(['role:superadmin,admin'])
     ->prefix('super')
     ->name('super.')
     ->group(function () {
@@ -133,7 +154,6 @@ Route::middleware(['auth'])->group(function () {
 
         Route::delete('/barang/{id}', [BarangController::class,'destroy'])
             ->name('barang.destroy');
-
     });
 
 
@@ -143,23 +163,28 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::prefix('super')
+    Route::middleware(['role:superadmin,admin'])
+    ->prefix('super')
     ->name('super.')
-    ->middleware(['auth','role:superadmin,admin'])
     ->group(function(){
 
-        Route::get('/diskon', [DiskonController::class,'index'])->name('diskon.index');
+        Route::get('/diskon', [DiskonController::class,'index'])
+            ->name('diskon.index');
 
-        Route::get('/diskon/create', [DiskonController::class,'create'])->name('diskon.create');
+        Route::get('/diskon/create', [DiskonController::class,'create'])
+            ->name('diskon.create');
 
-        Route::post('/diskon/store', [DiskonController::class,'store'])->name('diskon.store');
+        Route::post('/diskon/store', [DiskonController::class,'store'])
+            ->name('diskon.store');
 
-        Route::get('/diskon/{id}/edit', [DiskonController::class,'edit'])->name('diskon.edit');
+        Route::get('/diskon/{id}/edit', [DiskonController::class,'edit'])
+            ->name('diskon.edit');
 
-        Route::put('/diskon/{id}', [DiskonController::class,'update'])->name('diskon.update');
+        Route::put('/diskon/{id}', [DiskonController::class,'update'])
+            ->name('diskon.update');
 
-        Route::delete('/diskon/{id}', [DiskonController::class,'destroy'])->name('diskon.destroy');
-
+        Route::delete('/diskon/{id}', [DiskonController::class,'destroy'])
+            ->name('diskon.destroy');
     });
 
 
@@ -169,7 +194,7 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::middleware(['auth','role:admin'])
+    Route::middleware(['role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -215,7 +240,6 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/laporan/stok', [LaporanController::class,'stok'])
             ->name('laporan.stok');
-
     });
 
 

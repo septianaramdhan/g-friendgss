@@ -14,7 +14,13 @@ class RoleMiddleware
             return redirect('/login');
         }
 
-        if (!in_array(Auth::user()->role, $roles)) {
+        $userRole = strtolower(trim(Auth::user()->role));
+
+        $roles = array_map(function ($role) {
+            return strtolower(trim($role));
+        }, $roles);
+
+        if (!in_array($userRole, $roles)) {
             abort(403);
         }
 
