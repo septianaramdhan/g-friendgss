@@ -23,6 +23,13 @@ class="w-full mt-1 p-2 rounded-lg text-black focus:outline-none">
 </div>
 
 <div class="mb-4">
+<label>Harga Modal</label>
+<input type="number" name="harga_modal"
+value="{{ old('harga_modal') }}"
+class="w-full mt-1 p-2 rounded-lg text-black focus:outline-none">
+</div>
+
+<div class="mb-4">
 <label>Harga</label>
 <input type="number" name="harga"
 value="{{ old('harga') }}"

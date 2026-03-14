@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Super;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Barang;
 use App\Models\Diskon;
 
@@ -35,6 +36,11 @@ class BarangController extends Controller
 
         Barang::create($request->all());
 
+        if(Auth::user()->role == 'admin'){
+            return redirect()->route('admin.barang.index')
+                ->with('success','Barang berhasil ditambahkan');
+        }
+
         return redirect()->route('super.barang.index')
             ->with('success','Barang berhasil ditambahkan');
     }
@@ -60,6 +66,11 @@ class BarangController extends Controller
 
         $barang->update($request->all());
 
+        if(Auth::user()->role == 'admin'){
+            return redirect()->route('admin.barang.index')
+                ->with('success','Barang berhasil diupdate');
+        }
+
         return redirect()->route('super.barang.index')
             ->with('success','Barang berhasil diupdate');
     }
@@ -68,6 +79,11 @@ class BarangController extends Controller
     {
         $barang = Barang::findOrFail($id);
         $barang->delete();
+
+        if(Auth::user()->role == 'admin'){
+            return redirect()->route('admin.barang.index')
+                ->with('success','Barang berhasil dihapus');
+        }
 
         return redirect()->route('super.barang.index')
             ->with('success','Barang berhasil dihapus');

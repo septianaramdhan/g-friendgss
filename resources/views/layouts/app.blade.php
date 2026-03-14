@@ -66,13 +66,39 @@
             @endif
 
             @if(auth()->user()->role == 'admin')
-                <li><a href="/admin/dashboard" class="block p-3 hover:bg-white/20 rounded">Dashboard</a></li>
-                <li><a href="/barang" class="block p-3 hover:bg-white/20 rounded">Kelola Barang</a></li>
-                <li><a href="#" class="block p-3 hover:bg-white/20 rounded">Laporan</a></li>
+
+                <li>
+                    <a href="/admin/dashboard"
+                    class="block p-3 rounded transition {{ request()->is('admin/dashboard') ? 'bg-white/30 font-semibold' : 'hover:bg-white/20' }}">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/admin/barang"
+                    class="block p-3 rounded transition {{ request()->is('admin/barang*') ? 'bg-white/30 font-semibold' : 'hover:bg-white/20' }}">
+                        Kelola Barang
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/admin/diskon"
+                    class="block p-3 rounded transition {{ request()->is('admin/diskon*') ? 'bg-white/30 font-semibold' : 'hover:bg-white/20' }}">
+                        Kelola Diskon
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/admin/laporan/stok"
+                    class="block p-3 rounded transition {{ request()->is('admin/laporan/stok*') ? 'bg-white/30 font-semibold' : 'hover:bg-white/20' }}">
+                        Laporan Stok
+                    </a>
+                </li>
+
             @endif
 
             @if(auth()->user()->role == 'operator')
-                <li><a href="/kasir/dashboard" class="block p-3 hover:bg-white/20 rounded">Dashboard</a></li>
+                <li><a href="/operator/dashboard" class="block p-3 hover:bg-white/20 rounded">Dashboard</a></li>
                 <li><a href="#" class="block p-3 hover:bg-white/20 rounded">Transaksi</a></li>
                 <li><a href="#" class="block p-3 hover:bg-white/20 rounded">Cetak Struk</a></li>
             @endif

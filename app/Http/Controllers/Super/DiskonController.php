@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Super;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Diskon;
 
 class DiskonController extends Controller
@@ -12,6 +13,7 @@ class DiskonController extends Controller
     public function index()
     {
         $diskon = Diskon::latest()->get();
+
         return view('super.diskon.index', compact('diskon'));
     }
 
@@ -27,12 +29,19 @@ class DiskonController extends Controller
             'persen' => $request->persen
         ]);
 
-        return redirect()->route('super.diskon.index');
+        if(Auth::user()->role == 'admin'){
+            return redirect()->route('admin.diskon.index')
+                ->with('success','Diskon berhasil ditambahkan');
+        }
+
+        return redirect()->route('super.diskon.index')
+            ->with('success','Diskon berhasil ditambahkan');
     }
 
     public function edit($id)
     {
         $diskon = Diskon::findOrFail($id);
+
         return view('super.diskon.edit', compact('diskon'));
     }
 
@@ -45,13 +54,25 @@ class DiskonController extends Controller
             'persen' => $request->persen
         ]);
 
-        return redirect()->route('super.diskon.index');
+        if(Auth::user()->role == 'admin'){
+            return redirect()->route('admin.diskon.index')
+                ->with('success','Diskon berhasil diupdate');
+        }
+
+        return redirect()->route('super.diskon.index')
+            ->with('success','Diskon berhasil diupdate');
     }
 
     public function destroy($id)
     {
         Diskon::destroy($id);
 
-        return redirect()->route('super.diskon.index');
+        if(Auth::user()->role == 'admin'){
+            return redirect()->route('admin.diskon.index')
+                ->with('success','Diskon berhasil dihapus');
+        }
+
+        return redirect()->route('super.diskon.index')
+            ->with('success','Diskon berhasil dihapus');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -18,6 +19,16 @@ class DashboardController extends Controller
             return redirect('/login');
         }
 
-        return view('admin.dashboard');
+        $totalBarang = DB::table('barang')->count();
+        $totalDiskon = DB::table('diskon')->count();
+        $stokMenipis = DB::table('barang')
+                        ->where('stok','<=',5)
+                        ->count();
+
+        return view('admin.dashboard', compact(
+            'totalBarang',
+            'totalDiskon',
+            'stokMenipis'
+        ));
     }
 }

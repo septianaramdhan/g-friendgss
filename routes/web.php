@@ -75,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/dashboard', [SuperDashboard::class, 'index'])
             ->name('dashboard');
-    
+
         Route::get('/users', [UserController::class, 'index'])
             ->name('index');
 
@@ -88,14 +88,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users/edit/{id}', [UserController::class, 'edit'])
             ->name('edit');
 
-        // 🔥 INI YANG DIGANTI POST → PUT
         Route::put('/users/update/{id}', [UserController::class, 'update'])
             ->name('update');
 
         Route::delete('/users/{id}', [UserController::class, 'destroy'])
             ->name('destroy');
 
-                         // 🔥 LAPORAN
         Route::get('/laporan/transaksi', [LaporanController::class, 'transaksi'])
             ->name('laporan.transaksi');
 
@@ -106,54 +104,63 @@ Route::middleware(['auth'])->group(function () {
             ->name('laporan.stok');
     });
 
-    
-Route::middleware(['auth','role:superadmin'])
-->prefix('super')
-->name('super.')
-->group(function () {
 
-    // LIST BARANG
-    Route::get('/barang', [BarangController::class,'index'])
-        ->name('barang.index');
+    /*
+    |--------------------------------------------------------------------------
+    | BARANG (SUPERADMIN + ADMIN)
+    |--------------------------------------------------------------------------
+    */
 
-    // HALAMAN CREATE
-    Route::get('/barang/create', [BarangController::class,'create'])
-        ->name('barang.create');
+    Route::middleware(['auth','role:superadmin,admin'])
+    ->prefix('super')
+    ->name('super.')
+    ->group(function () {
 
-    // STORE
-    Route::post('/barang/store', [BarangController::class,'store'])
-        ->name('barang.store');
+        Route::get('/barang', [BarangController::class,'index'])
+            ->name('barang.index');
 
-    // EDIT
-    Route::get('/barang/{id}/edit', [BarangController::class,'edit'])
-        ->name('barang.edit');
+        Route::get('/barang/create', [BarangController::class,'create'])
+            ->name('barang.create');
 
-    // UPDATE
-    Route::put('/barang/{id}', [BarangController::class,'update'])
-        ->name('barang.update');
+        Route::post('/barang/store', [BarangController::class,'store'])
+            ->name('barang.store');
 
-    // DELETE
-    Route::delete('/barang/{id}', [BarangController::class,'destroy'])
-        ->name('barang.destroy');
+        Route::get('/barang/{id}/edit', [BarangController::class,'edit'])
+            ->name('barang.edit');
 
-});
+        Route::put('/barang/{id}', [BarangController::class,'update'])
+            ->name('barang.update');
 
-Route::prefix('super')->name('super.')->middleware(['auth','role:superadmin'])->group(function(){
+        Route::delete('/barang/{id}', [BarangController::class,'destroy'])
+            ->name('barang.destroy');
 
-    Route::get('/diskon', [DiskonController::class,'index'])->name('diskon.index');
+    });
 
-    Route::get('/diskon/create', [DiskonController::class,'create'])->name('diskon.create');
 
-    Route::post('/diskon/store', [DiskonController::class,'store'])->name('diskon.store');
+    /*
+    |--------------------------------------------------------------------------
+    | DISKON (SUPERADMIN + ADMIN)
+    |--------------------------------------------------------------------------
+    */
 
-    Route::get('/diskon/{id}/edit', [DiskonController::class,'edit'])->name('diskon.edit');
+    Route::prefix('super')
+    ->name('super.')
+    ->middleware(['auth','role:superadmin,admin'])
+    ->group(function(){
 
-    Route::put('/diskon/{id}', [DiskonController::class,'update'])->name('diskon.update');
+        Route::get('/diskon', [DiskonController::class,'index'])->name('diskon.index');
 
-    Route::delete('/diskon/{id}', [DiskonController::class,'destroy'])->name('diskon.destroy');
+        Route::get('/diskon/create', [DiskonController::class,'create'])->name('diskon.create');
 
-});
+        Route::post('/diskon/store', [DiskonController::class,'store'])->name('diskon.store');
 
+        Route::get('/diskon/{id}/edit', [DiskonController::class,'edit'])->name('diskon.edit');
+
+        Route::put('/diskon/{id}', [DiskonController::class,'update'])->name('diskon.update');
+
+        Route::delete('/diskon/{id}', [DiskonController::class,'destroy'])->name('diskon.destroy');
+
+    });
 
 
     /*
@@ -162,16 +169,59 @@ Route::prefix('super')->name('super.')->middleware(['auth','role:superadmin'])->
     |--------------------------------------------------------------------------
     */
 
-    Route::middleware(['role:admin'])->group(function () {
+    Route::middleware(['auth','role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-        Route::get('/admin/dashboard', [AdminDashboard::class, 'index'])
-            ->name('admin.dashboard');
+        Route::get('/dashboard', [AdminDashboard::class, 'index'])
+            ->name('dashboard');
+
+        Route::get('/barang', [BarangController::class,'index'])
+            ->name('barang.index');
+
+        Route::get('/barang/create', [BarangController::class,'create'])
+            ->name('barang.create');
+
+        Route::post('/barang/store', [BarangController::class,'store'])
+            ->name('barang.store');
+
+        Route::get('/barang/{id}/edit', [BarangController::class,'edit'])
+            ->name('barang.edit');
+
+        Route::put('/barang/{id}', [BarangController::class,'update'])
+            ->name('barang.update');
+
+        Route::delete('/barang/{id}', [BarangController::class,'destroy'])
+            ->name('barang.destroy');
+
+        Route::get('/diskon', [DiskonController::class,'index'])
+            ->name('diskon.index');
+
+        Route::get('/diskon/create', [DiskonController::class,'create'])
+            ->name('diskon.create');
+
+        Route::post('/diskon/store', [DiskonController::class,'store'])
+            ->name('diskon.store');
+
+        Route::get('/diskon/{id}/edit', [DiskonController::class,'edit'])
+            ->name('diskon.edit');
+
+        Route::put('/diskon/{id}', [DiskonController::class,'update'])
+            ->name('diskon.update');
+
+        Route::delete('/diskon/{id}', [DiskonController::class,'destroy'])
+            ->name('diskon.destroy');
+
+        Route::get('/laporan/stok', [LaporanController::class,'stok'])
+            ->name('laporan.stok');
+
     });
 
 
     /*
     |--------------------------------------------------------------------------
-    | KASIR
+    | KASIR / OPERATOR
     |--------------------------------------------------------------------------
     */
 
@@ -179,5 +229,7 @@ Route::prefix('super')->name('super.')->middleware(['auth','role:superadmin'])->
 
         Route::get('/operator/dashboard', [OperatorDashboard::class, 'index'])
             ->name('operator.dashboard');
+
     });
+
 });

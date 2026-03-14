@@ -9,22 +9,30 @@
     <!-- Card -->
     <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-xl shadow-lg">
         <h3 class="text-sm">Total Penjualan</h3>
-        <p class="text-2xl font-bold mt-2">Rp 0</p>
+        <p class="text-2xl font-bold mt-2">
+            Rp {{ number_format($totalPenjualan ?? 0,0,',','.') }}
+        </p>
     </div>
 
     <div class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-6 rounded-xl shadow-lg">
         <h3 class="text-sm">Total Transaksi</h3>
-        <p class="text-2xl font-bold mt-2">0</p>
+        <p class="text-2xl font-bold mt-2">
+            {{ $totalTransaksi ?? 0 }}
+        </p>
     </div>
 
     <div class="bg-gradient-to-r from-pink-500 to-rose-500 text-white p-6 rounded-xl shadow-lg">
         <h3 class="text-sm">Total Profit</h3>
-        <p class="text-2xl font-bold mt-2">Rp 0</p>
+        <p class="text-2xl font-bold mt-2">
+            Rp {{ number_format($totalProfit ?? 0,0,',','.') }}
+        </p>
     </div>
 
     <div class="bg-gradient-to-r from-purple-700 to-indigo-600 text-white p-6 rounded-xl shadow-lg">
         <h3 class="text-sm">Stok Menipis</h3>
-        <p class="text-2xl font-bold mt-2">0</p>
+        <p class="text-2xl font-bold mt-2">
+            {{ $stokMenipis ?? 0 }}
+        </p>
     </div>
 
 </div>
@@ -53,7 +61,7 @@ const chart = new Chart(ctx, {
         labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul'],
         datasets: [{
             label: 'Penjualan',
-            data: [120, 190, 300, 250, 320, 400, 450],
+            data: [0, 0, 0, 0, 0, 0, 0],
             borderColor: 'rgb(255,0,150)',
             backgroundColor: 'rgba(255,0,150,0.1)',
             tension: 0.4,
@@ -73,8 +81,10 @@ const chart = new Chart(ctx, {
             x:{
                 ticks:{ color:'#9333ea' }
             },
-            y:{
-                ticks:{ color:'#9333ea' }
+          y:{
+             beginAtZero: true,
+             min: 0,
+             ticks:{ color:'#9333ea' }
             }
         }
     }

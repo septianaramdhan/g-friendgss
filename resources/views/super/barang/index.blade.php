@@ -6,7 +6,6 @@
 
 <div class="min-h-screen p-8 bg-gradient-to-br from-white via-pink-100 to-pink-300">
 
-```
 <div class="max-w-6xl mx-auto">
 
     <div class="flex justify-between items-center mb-6">
@@ -31,6 +30,7 @@
                 <tr>
                     <th class="p-4">No</th>
                     <th class="p-4">Nama Barang</th>
+                    <th class="p-4">Harga Modal</th>
                     <th class="p-4">Harga</th>
                     <th class="p-4">Stok</th>
                     <th class="p-4">Diskon</th>
@@ -49,6 +49,10 @@
 
                         <td class="p-4">
                             {{ $b->nama_barang }}
+                        </td>
+
+                        <td class="p-4">
+                            Rp {{ number_format($b->harga_modal ?? 0,0,',','.') }}
                         </td>
 
                         <td class="p-4">
@@ -97,7 +101,7 @@
                 @empty
 
                     <tr>
-                        <td colspan="6" class="p-6 text-center text-gray-500">
+                        <td colspan="7" class="p-6 text-center text-gray-500">
                             Belum ada data barang
                         </td>
                     </tr>
@@ -111,7 +115,6 @@
     </div>
 
 </div>
-```
 
 </div>
 
